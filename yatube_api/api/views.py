@@ -1,10 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
-from posts.models import Post
+from posts.models import Group, Post
 
 from api.permissions import AuthorOrReadOnly
-from api.serializers import PostSerializer, CommentSerializer
+from api.serializers import CommentSerializer, GroupSerializer, PostSerializer
 
 
 
@@ -28,3 +28,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, post=self.get_post())
+
+
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
