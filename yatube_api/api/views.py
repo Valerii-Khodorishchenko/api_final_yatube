@@ -54,7 +54,6 @@ class FollowViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Follow.objects.filter(user=self.request.user)
 
-
     def create(self, request):
         following_username = request.data.get('following')
         if not following_username:

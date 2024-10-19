@@ -56,7 +56,98 @@ python3 yatube_api/manage.py migrate
 python3 yatube_api/manage.py runserver
 ```
 
-<!-- ## Примеры запросов
+## Примеры запросов
+### Получение доступа к АPI:
+
+Получить JWT-токен
+
+```
+POST http://127.0.0.1:8000/api/v1/jwt/create/
+
+{
+  "username": "string",
+  "password": "string"
+}
+
+Ответ:
+200
+{
+  "refresh": "string",
+  "access": "string"
+}
+
+400
+{
+  "username": [
+    "Обязательное поле."
+  ],
+  "password": [
+    "Обязательное поле."
+  ]
+}
+
+401
+{
+  "detail": "No active account found with the given credentials"
+}
+```
+
+Обновить JWT-токен
+
+```
+POST http://127.0.0.1:8000/api/v1/jwt/refresh/
+
+{
+  "refresh": "string"
+}
+
+Ответ:
+200
+{
+  "access": "string"
+}
+
+400
+{
+  "refresh": [
+    "Обязательное поле."
+  ]
+}
+
+401
+{
+  "detail": "Token is invalid or expired",
+  "code": "token_not_valid"
+}
+```
+
+Проверить JWT-токен
+
+```
+POST http://127.0.0.1:8000/api/v1/jwt/refresh/
+
+{
+  "token": "string"
+}
+
+Ответ:
+200
+
+400
+{
+  "token": [
+    "Обязательное поле."
+  ]
+}
+
+401
+{
+  "detail": "Token is invalid or expired",
+  "code": "token_not_valid"
+}
+```
+
+### Публикации:
 Получение списка публикаций:
 
 ```
@@ -78,4 +169,4 @@ GET /api/v1/posts/?limit=10&offset=0
     }
   ]
 }
-``` -->
+```
