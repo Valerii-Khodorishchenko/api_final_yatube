@@ -11,7 +11,7 @@ class Group(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.title[:30] + '...' if len(self.title) > 30 else self.title
 
 
 class Post(models.Model):
@@ -26,8 +26,15 @@ class Post(models.Model):
     image = models.ImageField(
         upload_to='posts/', null=True, blank=True)
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
-        return self.text
+        return ''.join([
+            f'{self.author} - ',
+            f'{self.text[:30]}...' if len(self.text) > 30 else self.text,
+            f' От {self.pub_date}'
+        ])
 
 
 class Comment(models.Model):
@@ -38,6 +45,17 @@ class Comment(models.Model):
     text = models.TextField()
     created = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created']
+
+    def __str__(self):
+        return ''.join([
+            f'Комментарий к посту: "{self.post}"',
+            f'{self.author} - ',
+            f'{self.text[:30]}...' if len(self.text) > 30 else self.text,
+            f' От {self.created}'
+        ])
 
 
 class Follow(models.Model):
@@ -54,3 +72,7 @@ class Follow(models.Model):
 
     class Meta:
         unique_together = ('user', 'following')
+        ordering = ['following']
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.following}'[:30]
